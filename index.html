@@ -3,256 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>108課綱 學測五科 AI 錯題管家</title>
-    <!-- 引入 Tailwind CSS 確保介面現代且支援手機端 -->
+    <title>108課綱 學測五科 AI 錯題管家 v2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .loader {
             border-top-color: #4F46E5;
-            -webkit-animation: spinner 1.5s linear infinite;
             animation: spinner 1.5s linear infinite;
         }
         @keyframes spinner {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* 自訂滾動條 */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800 antialiased p-2 md:p-6">
+<body class="bg-gray-50 font-sans text-gray-800 antialiased p-2 md:p-6">
 
-    <div class="max-w-6xl mx-auto space-y-6">
+    <div class="max-w-7xl mx-auto space-y-6">
         
-        <!-- 頂部標題區 -->
-        <header class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-6 rounded-2xl shadow-lg text-center">
-            <h1 class="text-3xl font-extrabold tracking-tight">📸 學測五科 AI 錯題管家</h1>
-            <p class="mt-2 text-indigo-100 font-medium">拍照上傳題目，AI 自動解析病因並歸檔至 108 課綱弱點儀表板</p>
+        <header class="bg-gradient-to-r from-indigo-700 via-purple-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg text-center relative overflow-hidden">
+            <h1 class="text-3xl font-extrabold tracking-tight relative z-10">📸 學測五科 AI 錯題管家 2.0</h1>
+            <p class="mt-2 text-indigo-100 font-medium relative z-10">支援 108 課綱細項 ｜ 自動歸類 ｜ 知識點追蹤 ｜ 弱點診斷</p>
         </header>
 
-        <!-- 核心功能區：分為左右/上下兩塊 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             <!-- 左側：拍照上傳與 AI 模擬分析 -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col">
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm mr-3">Step 1</span> 上傳錯題照片
+            <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col h-fit">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm mr-3">Step 1</span> 上傳錯題
                 </h2>
                 
-                <!-- 拍照按鈕 -->
-                <label class="flex flex-col items-center justify-center w-full h-40 border-2 border-blue-300 border-dashed rounded-xl cursor-pointer bg-blue-50 hover:bg-blue-100 transition-colors">
+                <label class="flex flex-col items-center justify-center w-full h-40 border-2 border-blue-300 border-dashed rounded-xl cursor-pointer bg-blue-50 hover:bg-blue-100 transition">
                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg class="w-12 h-12 mb-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        <p class="mb-1 text-sm font-bold text-blue-700">點擊開啟相機 或 選擇圖片</p>
+                        <svg class="w-10 h-10 mb-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <p class="text-sm font-bold text-blue-700">點擊開啟相機 或 選擇圖片</p>
                     </div>
-                    <input id="imageInput" type="file" accept="image/*" capture="environment" class="hidden" />
+                    <input id="imageInput" type="file" accept="image/*" class="hidden" />
                 </label>
 
-                <!-- 預覽與分析按鈕 -->
                 <div id="previewContainer" class="hidden mt-4 text-center">
-                    <img id="imagePreview" src="" alt="預覽" class="max-h-48 mx-auto rounded-lg shadow border border-gray-200 mb-4 object-contain" />
-                    <button id="analyzeBtn" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-transform transform active:scale-95 text-lg">
-                        ✨ 啟動 AI 智能診斷
+                    <img id="imagePreview" src="" class="max-h-40 mx-auto rounded-lg shadow border border-gray-200 mb-4 object-contain" />
+                    <button id="analyzeBtn" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-transform transform active:scale-95">
+                        ✨ 啟動 AI 智能診斷與知識點萃取
                     </button>
                 </div>
 
-                <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-gray-100">
 
-                <!-- AI 分析結果區塊 -->
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                     <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm mr-3">Step 2</span> AI 診斷報告
                 </h2>
 
-                <div id="aiStateEmpty" class="flex-1 flex items-center justify-center bg-gray-50 rounded-xl border border-gray-200 p-8 text-center text-gray-400 font-medium">
+                <div id="aiStateEmpty" class="flex-1 flex items-center justify-center bg-gray-50 rounded-xl border border-gray-200 p-8 text-center text-gray-400 text-sm">
                     上傳題目後，AI 將自動為您找出錯因並歸類單元
                 </div>
 
-                <div id="aiStateLoading" class="hidden flex-1 flex flex-col items-center justify-center py-10 bg-gray-50 rounded-xl border border-gray-200">
-                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-                    <p class="text-indigo-600 font-bold animate-pulse">AI 正在辨識題目文字與課綱考點...</p>
+                <div id="aiStateLoading" class="hidden flex-1 flex flex-col items-center justify-center py-8 bg-gray-50 rounded-xl border border-gray-200">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-10 w-10 mb-4"></div>
+                    <p class="text-indigo-600 font-bold text-sm animate-pulse">AI 正在解析題目並定位課綱知識點...</p>
                 </div>
 
                 <div id="aiStateResult" class="hidden flex-col gap-3">
-                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl shadow-sm">
-                        <p class="text-xs text-red-600 font-bold mb-1">🏷️ 自動歸類考點</p>
-                        <p id="aiSubjectTopic" class="text-lg font-extrabold text-gray-800"></p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded-r-xl shadow-sm">
+                        <p class="text-xs text-red-600 font-bold mb-1">🏷️ 自動歸類考點 (若無符合將自動新增)</p>
+                        <p id="aiSubjectTopic" class="text-base font-extrabold text-gray-800"></p>
                     </div>
-                    <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-xl shadow-sm">
-                        <p class="text-sm font-bold text-yellow-700 mb-1">🔍 錯因分析</p>
-                        <p class="text-gray-700 text-sm leading-relaxed">你的選項犯了常見的觀念混淆錯誤。根據題目敘述，正確的思考方向應該是利用已知條件進行反推，而非直接代入公式。</p>
+                    <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-xl shadow-sm">
+                        <p class="text-sm font-bold text-yellow-700 mb-1">🔍 萃取知識點紀錄</p>
+                        <p id="aiKnowledgePoint" class="text-gray-700 text-sm font-medium"></p>
                     </div>
-                    <div class="bg-green-50 border border-green-200 p-4 rounded-xl shadow-sm">
-                        <p class="text-sm font-bold text-green-700 mb-1">💡 破題關鍵提示</p>
-                        <p class="text-gray-700 text-sm font-medium">下次看到此類題型，第一步先確認「核心觀念與定義」，再進行條件拆解。</p>
-                    </div>
-                    <div class="mt-2 text-center text-sm font-bold text-indigo-700 bg-indigo-50 py-3 rounded-xl border border-indigo-100">
-                        ✅ 已將此題自動寫入右側弱點資料庫！
+                    <div class="text-center text-xs font-bold text-indigo-700 bg-indigo-50 py-2 rounded-xl border border-indigo-100">
+                        ✅ 已自動寫入右側資料庫，錯題數 +1！
                     </div>
                 </div>
             </div>
 
-            <!-- 右側：五科儀表板與手動明細 -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 flex flex-col h-[800px]">
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm mr-3">Dash</span> 弱點雷達儀表板
-                </h2>
+            <!-- 右側：儀表板與單元明細 -->
+            <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col h-[850px]">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center">
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm mr-3">Dash</span> 弱點雷達儀表板
+                    </h2>
+                    <!-- 最弱單元提示 -->
+                    <div id="weakest-banner" class="hidden text-xs font-bold bg-red-100 text-red-700 px-3 py-1.5 rounded-lg border border-red-200 shadow-sm flex items-center gap-1 animate-pulse">
+                        🔥 急需搶救：<span id="weakest-topic-name"></span>
+                    </div>
+                </div>
                 
-                <!-- 數據卡片 -->
-                <div class="grid grid-cols-3 gap-3 mb-6">
-                    <div class="bg-gray-800 text-white p-4 rounded-xl text-center shadow">
-                        <p class="text-xs font-medium opacity-80 mb-1">總錯題數</p>
-                        <p id="stat-total" class="text-3xl font-black">0</p>
+                <div class="grid grid-cols-6 gap-2 mb-4">
+                    <div class="col-span-6 sm:col-span-1 bg-gray-800 text-white p-3 rounded-xl text-center shadow-sm">
+                        <p class="text-[10px] opacity-80 mb-1">總錯題</p>
+                        <p id="stat-total" class="text-2xl font-black">0</p>
                     </div>
-                    <div class="bg-red-50 text-red-700 p-4 rounded-xl text-center border border-red-100">
-                        <p class="text-xs font-bold mb-1">國文</p>
-                        <p id="stat-chi" class="text-2xl font-black">0</p>
+                    <div class="bg-red-50 text-red-700 p-3 rounded-xl text-center border border-red-100">
+                        <p class="text-[10px] font-bold mb-1">國文</p>
+                        <p id="stat-chi" class="text-xl font-black">0</p>
                     </div>
-                    <div class="bg-orange-50 text-orange-700 p-4 rounded-xl text-center border border-orange-100">
-                        <p class="text-xs font-bold mb-1">英文</p>
-                        <p id="stat-eng" class="text-2xl font-black">0</p>
+                    <div class="bg-orange-50 text-orange-700 p-3 rounded-xl text-center border border-orange-100">
+                        <p class="text-[10px] font-bold mb-1">英文</p>
+                        <p id="stat-eng" class="text-xl font-black">0</p>
                     </div>
-                    <div class="bg-blue-50 text-blue-700 p-4 rounded-xl text-center border border-blue-100">
-                        <p class="text-xs font-bold mb-1">數學</p>
-                        <p id="stat-mat" class="text-2xl font-black">0</p>
+                    <div class="bg-blue-50 text-blue-700 p-3 rounded-xl text-center border border-blue-100">
+                        <p class="text-[10px] font-bold mb-1">數學</p>
+                        <p id="stat-mat" class="text-xl font-black">0</p>
                     </div>
-                    <div class="bg-green-50 text-green-700 p-4 rounded-xl text-center border border-green-100">
-                        <p class="text-xs font-bold mb-1">自然</p>
-                        <p id="stat-sci" class="text-2xl font-black">0</p>
+                    <div class="bg-green-50 text-green-700 p-3 rounded-xl text-center border border-green-100">
+                        <p class="text-[10px] font-bold mb-1">自然</p>
+                        <p id="stat-sci" class="text-xl font-black">0</p>
                     </div>
-                    <div class="bg-yellow-50 text-yellow-700 p-4 rounded-xl text-center border border-yellow-100">
-                        <p class="text-xs font-bold mb-1">社會</p>
-                        <p id="stat-soc" class="text-2xl font-black">0</p>
+                    <div class="bg-yellow-50 text-yellow-700 p-3 rounded-xl text-center border border-yellow-100">
+                        <p class="text-[10px] font-bold mb-1">社會</p>
+                        <p id="stat-soc" class="text-xl font-black">0</p>
                     </div>
                 </div>
 
-                <!-- 科目過濾器 -->
-                <div class="flex flex-wrap gap-2 mb-4 pb-2 border-b border-gray-100">
-                    <button class="filter-btn active px-4 py-2 text-sm font-bold rounded-lg bg-gray-200 text-gray-700 transition" onclick="filterData('全部')">全部</button>
-                    <button class="filter-btn px-4 py-2 text-sm font-bold rounded-lg bg-gray-200 text-gray-700 transition" onclick="filterData('國文')">國文</button>
-                    <button class="filter-btn px-4 py-2 text-sm font-bold rounded-lg bg-gray-200 text-gray-700 transition" onclick="filterData('英文')">英文</button>
-                    <button class="filter-btn px-4 py-2 text-sm font-bold rounded-lg bg-gray-200 text-gray-700 transition" onclick="filterData('數學')">數學</button>
-                    <button class="filter-btn px-4 py-2 text-sm font-bold rounded-lg bg-gray-200 text-gray-700 transition" onclick="filterData('自然')">自然</button>
-                    <button class="filter-btn px-4 py-2 text-sm font-bold rounded-lg bg-gray-200 text-gray-700 transition" onclick="filterData('社會')">社會</button>
+                <div class="flex flex-wrap gap-2 mb-3 pb-2 border-b border-gray-100">
+                    <button class="filter-btn active px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 text-white transition" onclick="filterData('全部')">全部</button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition" onclick="filterData('國文')">國文</button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition" onclick="filterData('英文')">英文</button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition" onclick="filterData('數學')">數學</button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition" onclick="filterData('自然')">自然</button>
+                    <button class="filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition" onclick="filterData('社會')">社會</button>
                 </div>
 
-                <!-- 考點列表 (可滾動) -->
-                <div id="list-container" class="flex-1 overflow-y-auto pr-2 space-y-3">
-                    <!-- 列表由 JS 生成 -->
+                <!-- 考點列表 -->
+                <div id="list-container" class="flex-1 overflow-y-auto pr-2 space-y-3 pb-10">
+                    <!-- JS 生成 -->
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. 定義學測五科 108 課綱核心考點資料庫 ---
-        const curriculumData = [
-            // 國文
+        // --- 1. 最新 108 課綱細部資料庫 ---
+        const initData = [
             ["國文", "閱讀理解與統整", "白話文/文言文閱讀、主旨判斷、推論分析"],
-            ["國文", "寫作能力與表達", "知性題寫作、情意題寫作、結構與修辭"],
-            ["國文", "國學常識與經典", "重要作家流派、文化常識、經史子集"],
-            ["國文", "字音字形與成語", "易錯字音字形、成語辨識與詞義應用"],
-            // 英文
-            ["英文", "詞彙與語意 (Vocab)", "1~5級單字、片語、字根字首推敲"],
-            ["英文", "語法與句型 (Grammar)", "時態、關代、分詞構句、倒裝句與假設語氣"],
-            ["英文", "克漏字與文意選填", "轉折詞、上下文邏輯連貫、篇章結構"],
-            ["英文", "閱讀測驗 (Reading)", "主旨(Main Idea)、細節題、推論題"],
-            ["英文", "翻譯與寫作 (Writing)", "中譯英、圖表/圖片看圖作文寫作"],
-            // 數學
-            ["數學", "數與式、指數與對數", "實數性質、絕對值、指對數運算與圖形"],
-            ["數學", "直線、圓與三角比", "直線方程式、圓方程式、正餘弦定理、三角函數"],
-            ["數學", "多項式與數列級數", "餘式/因式定理、等差/等比數列、遞迴"],
-            ["數學", "排列組合與機率", "排組原理、條件機率、貝氏定理、期望值"],
-            ["數學", "平面向量與空間向量", "內積/外積、直線與平面方程式、三階行列式"],
-            ["數學", "矩陣", "矩陣運算、轉移矩陣、線性方程組"],
-            // 自然
-            ["自然", "物理：物體的運動與力", "運動學圖表、牛頓定律、動量與能量守恆"],
-            ["自然", "物理：電磁與光學", "電場磁場、電磁感應、波的干涉與全反射"],
-            ["自然", "化學：反應與計量", "化學計量、莫耳數、酸鹼中和、氧化還原"],
-            ["自然", "化學：物質構造與有機", "電子排列、化學鍵、週期表、有機物分類"],
-            ["自然", "生物：細胞與遺傳", "細胞構造、光合呼吸、孟德爾遺傳、DNA/RNA"],
-            ["自然", "生物：演化與生態", "演化證據、族群生態、能量流動與多樣性"],
-            ["自然", "地科：地球與大氣水文", "板塊構造、地震、大氣分層、氣候與水循環"],
-            ["自然", "地科：天文與環境", "天球座標、太陽系、恆星視星等、氣候變遷"],
-            // 社會
-            ["社會", "歷史：台灣史", "大航海、清領、日治經濟與社會運動、戰後民主化"],
-            ["社會", "歷史：東亞史", "華夏體制、科舉、近代西方衝擊與現代東亞局勢"],
-            ["社會", "歷史：世界史", "古典文明、地理大發現、兩次大戰與冷戰"],
-            ["社會", "地理：地理技能與自然", "地圖/GIS、地形、氣候類型與水文系統"],
-            ["社會", "地理：人文與區域地理", "人口與農業、工業區位、都市化、全球化影響"],
-            ["社會", "公民：國家與民主政治", "政府體制(總統/內閣制)、選舉制度與政黨"],
-            ["社會", "公民：法律與日常生活", "憲法基本權、民法契約、刑法原則、行政救濟"],
-            ["社會", "公民：市場與經濟生活", "供需彈性、市場失靈(外部性)、總體經濟(GDP)"]
+            ["國文", "寫作與表達", "知性題、情意題寫作"],
+            ["國文", "國學常識", "作家流派、文化常識"],
+            ["英文", "詞彙與語意", "單字、片語、字根字首"],
+            ["英文", "語法與句型", "時態、關代、分詞構句"],
+            ["英文", "閱讀與克漏字", "轉折詞、主旨、細節題"],
+            ["數學", "數與式、指對數", "實數性質、絕對值、指對數運算"],
+            ["數學", "直線、圓與三角比", "直線/圓方程式、三角函數"],
+            ["數學", "排列組合與機率", "排組原理、條件機率、期望值"],
+            
+            // 自然更新
+            ["自然", "物理：科學態度與方法", "科學方法、SI制、物理發展簡史"],
+            ["自然", "物理：物質組成與交互作用", "原子構造、四種基本交互作用"],
+            ["自然", "物理：物體運動與天體", "運動學、牛頓定律、克卜勒"],
+            ["自然", "物理：電磁效應與波", "電流磁效應、電磁感應、光與波"],
+            ["自然", "物理：量子現象與光譜", "光電效應、波粒二象性、氫原子光譜"],
+            ["自然", "物理：能量形式與守恆", "功與動能、力學能守恆、質能互換"],
+            ["自然", "化學：物質分類與分離", "純物質與混合物、分離實驗、原子結構"],
+            ["自然", "化學：週期表與化學鍵", "族與週期、離子/共價/金屬鍵"],
+            ["自然", "化學：化學式與計量", "化學方程式、限制試劑、反應熱"],
+            ["自然", "化學：水溶液與反應", "濃度、酸鹼中和、氧化還原"],
+            ["自然", "化學：生活化學與科技", "生物大分子、環境化學"],
+            ["自然", "生物：細胞構造與功能", "原核真核、細胞膜、胞器"],
+            ["自然", "生物：細胞能量來源", "代謝、酵素、呼吸與光合作用"],
+            ["自然", "生物：細胞週期與分裂", "有絲分裂、減數分裂"],
+            ["自然", "生物：性狀遺傳與DNA", "孟德爾遺傳、性聯、DNA與基因表現"],
+            ["自然", "生物：生物演化與分類", "天擇說、演化證據、三域系統"],
+            ["自然", "地科：太空中的地球", "太陽系、星等觀星、宇宙起源"],
+            ["自然", "地科：固態地球變動", "地球內部、板塊構造、地震"],
+            ["自然", "地科：大氣與天氣", "大氣結構、氣壓風、天氣系統"],
+            ["自然", "地科：海洋與環境", "海水性質、洋流潮汐、海氣交互"],
+            ["自然", "地科：氣候變遷與災害", "氣候變遷、全球暖化、天然災害"],
+
+            // 社會更新
+            ["社會", "歷史：台灣史", "原住民、荷西、清領、日治政經、當代台灣"],
+            ["社會", "歷史：東亞史", "傳統政治秩序、人群移動、西方衝擊與現代化"],
+            ["社會", "歷史：世界史", "古典遺產、科學啟蒙、兩次大戰與冷戰"],
+            ["社會", "地理：地理技能", "地圖要素、GIS空間分析"],
+            ["社會", "地理：地理系統(自然)", "地形景觀、氣候系統"],
+            ["社會", "地理：地理系統(人文)", "人口轉型、都市聚落、產業經濟"],
+            ["社會", "地理：區域地理", "台灣東亞、世界三大重要區域"],
+            ["社會", "公民：社會與文化", "自我互動、社會流動不平等、媒體第四權"],
+            ["社會", "公民：政治與民主", "國家主權、政府體制、選舉與兩岸"],
+            ["社會", "公民：法律與生活", "憲法保障、行政救濟、民法、刑法"],
+            ["社會", "公民：經濟與永續發展", "市場供需、外部效果、GDP、國際貿易"]
         ];
 
-        // --- 2. 系統初始化與 LocalStorage 存取 ---
-        let mistakesDB = JSON.parse(localStorage.getItem('GSAT_MistakesDB'));
+        // --- 2. 資料庫初始化 (具備結構升級防呆機制) ---
+        let mistakesDB = JSON.parse(localStorage.getItem('GSAT_MistakesDB_v2'));
+        
+        // 若無資料，或需要重建
         if (!mistakesDB) {
-            mistakesDB = curriculumData.map((item, index) => ({
-                id: index, subject: item[0], topic: item[1], desc: item[2], count: 0
+            mistakesDB = initData.map((item, index) => ({
+                id: Date.now() + index, // 用 timestamp 確保唯一性
+                subject: item[0], 
+                topic: item[1], 
+                desc: item[2], 
+                count: 0,
+                points: [] // 新增：知識點陣列
             }));
+            saveDB();
+        }
+
+        function saveDB() {
+            localStorage.setItem('GSAT_MistakesDB_v2', JSON.stringify(mistakesDB));
         }
 
         let currentFilter = '全部';
-
-        const subjectColors = {
+        const colors = {
             "國文": { bg: "bg-red-50", text: "text-red-700", border: "border-red-200", btn: "bg-red-500" },
             "英文": { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200", btn: "bg-orange-500" },
             "數學": { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200", btn: "bg-blue-500" },
             "自然": { bg: "bg-green-50", text: "text-green-700", border: "border-green-200", btn: "bg-green-500" },
-            "社會": { bg: "bg-yellow-50", text: "text-yellow-700", border: "border-yellow-200", btn: "bg-yellow-500" }
+            "社會": { bg: "bg-yellow-50", text: "text-yellow-700", border: "border-yellow-200", btn: "bg-yellow-500" },
+            "預設": { bg: "bg-gray-50", text: "text-gray-700", border: "border-gray-200", btn: "bg-gray-500" }
         };
 
-        // --- 3. 渲染右側列表與統計 ---
+        // --- 3. 動態渲染與資料操作 ---
         function renderList() {
             const container = document.getElementById('list-container');
             container.innerHTML = '';
             
-            const filtered = currentFilter === '全部' 
+            let filtered = currentFilter === '全部' 
                 ? mistakesDB 
                 : mistakesDB.filter(d => d.subject === currentFilter);
 
-            // 將錯題數多的排在前面
             filtered.sort((a, b) => b.count - a.count);
 
-            filtered.forEach(item => {
-                const colors = subjectColors[item.subject];
+            filtered.forEach((item, index) => {
+                const c = colors[item.subject] || colors["預設"];
+                
+                // 判斷是否為「最不熟單元」(第一個且 count > 0)
+                const isTopWeakness = (index === 0 && item.count > 0 && currentFilter === '全部');
+                
+                const pointsHtml = item.points && item.points.length > 0 
+                    ? `<ul class="list-disc pl-4 mt-2 space-y-1 text-xs text-gray-600 bg-white/60 p-2 rounded border border-gray-100">
+                        ${item.points.map(p => `<li>${p}</li>`).join('')}
+                       </ul>`
+                    : '';
+
                 const row = document.createElement('div');
-                row.className = `flex items-center justify-between p-3 rounded-xl border ${colors.border} bg-white shadow-sm`;
+                row.className = `flex flex-col p-3 rounded-xl border ${isTopWeakness ? 'border-red-400 bg-red-50 shadow-md' : c.border + ' bg-white shadow-sm'} transition-all`;
+                
                 row.innerHTML = `
-                    <div class="flex-1 pr-4">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="${colors.bg} ${colors.text} text-xs font-bold px-2 py-0.5 rounded">${item.subject}</span>
-                            <span class="font-bold text-gray-800 text-sm">${item.topic}</span>
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1 pr-4">
+                            <div class="flex items-center gap-2 mb-1 flex-wrap">
+                                <span class="${c.bg} ${c.text} text-[10px] font-bold px-2 py-0.5 rounded">${item.subject}</span>
+                                <span class="font-bold text-gray-800 text-sm">${item.topic}</span>
+                                ${isTopWeakness ? '<span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full animate-pulse">🔥 最不熟</span>' : ''}
+                            </div>
+                            <div class="text-xs text-gray-500">${item.desc}</div>
                         </div>
-                        <div class="text-xs text-gray-500">${item.desc}</div>
+                        <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-1 border border-gray-100">
+                            <button onclick="updateCount(${item.id}, -1)" class="w-7 h-7 rounded bg-white hover:bg-gray-200 text-gray-600 font-bold flex items-center justify-center shadow-sm">-</button>
+                            <span class="w-6 text-center font-black text-base ${c.text}">${item.count}</span>
+                            <button onclick="updateCount(${item.id}, 1)" class="w-7 h-7 rounded ${c.btn} hover:opacity-80 text-white font-bold flex items-center justify-center shadow-sm">+</button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <button onclick="updateCount(${item.id}, -1)" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-lg flex items-center justify-center transition">-</button>
-                        <span id="count-${item.id}" class="w-6 text-center font-black text-lg ${colors.text}">${item.count}</span>
-                        <button onclick="updateCount(${item.id}, 1)" class="w-8 h-8 rounded-full ${colors.btn} hover:opacity-80 text-white font-bold text-lg flex items-center justify-center transition">+</button>
+                    ${pointsHtml}
+                    <div class="mt-2 text-right">
+                        <button onclick="addManualPoint(${item.id})" class="text-[10px] text-indigo-500 hover:text-indigo-700 font-bold underline">
+                            + 補記知識點
+                        </button>
                     </div>
                 `;
                 container.appendChild(row);
             });
             updateDashboard();
-            localStorage.setItem('GSAT_MistakesDB', JSON.stringify(mistakesDB));
+            saveDB();
         }
 
         function updateCount(id, change) {
             const item = mistakesDB.find(d => d.id === id);
             if (item) {
                 item.count = Math.max(0, item.count + change);
-                renderList(); // 重新渲染以觸發排序
+                renderList(); 
+            }
+        }
+
+        function addManualPoint(id) {
+            const point = prompt("請輸入這題錯的具體知識點 (例如：忘記牛頓第二定律公式)");
+            if (point && point.trim() !== "") {
+                const item = mistakesDB.find(d => d.id === id);
+                if (item) {
+                    if(!item.points) item.points = [];
+                    item.points.unshift(point); // 加在最前面
+                    // 最多留 5 筆紀錄以免版面過長
+                    if(item.points.length > 5) item.points.pop();
+                    item.count += 1; // 手動新增知識點順便當作錯一次
+                    renderList();
+                }
+            }
+        }
+
+        // 動態新增分類的核心函數
+        function addDynamicTopic(subject, topicName, desc, initialPoint) {
+            // 檢查是否已存在
+            let existing = mistakesDB.find(d => d.subject === subject && d.topic === topicName);
+            if(existing) {
+                existing.count += 1;
+                if(initialPoint) existing.points.unshift(initialPoint);
+                return existing;
+            } else {
+                let newItem = {
+                    id: Date.now(),
+                    subject: subject,
+                    topic: topicName,
+                    desc: desc,
+                    count: 1,
+                    points: initialPoint ? [initialPoint] : []
+                };
+                mistakesDB.push(newItem);
+                return newItem;
             }
         }
 
         function updateDashboard() {
             let stats = { "國文": 0, "英文": 0, "數學": 0, "自然": 0, "社會": 0 };
             let total = 0;
-            mistakesDB.forEach(item => { stats[item.subject] += item.count; total += item.count; });
+            let maxTopic = null;
+
+            mistakesDB.forEach(item => { 
+                if(stats[item.subject] !== undefined) stats[item.subject] += item.count; 
+                total += item.count;
+                
+                // 找尋全域最弱單元
+                if(item.count > 0) {
+                    if(!maxTopic || item.count > maxTopic.count) {
+                        maxTopic = item;
+                    }
+                }
+            });
             
             document.getElementById('stat-total').innerText = total;
             document.getElementById('stat-chi').innerText = stats["國文"];
@@ -260,80 +341,98 @@
             document.getElementById('stat-mat').innerText = stats["數學"];
             document.getElementById('stat-sci').innerText = stats["自然"];
             document.getElementById('stat-soc').innerText = stats["社會"];
+
+            const weakBanner = document.getElementById('weakest-banner');
+            if(maxTopic) {
+                document.getElementById('weakest-topic-name').innerText = `${maxTopic.subject}-${maxTopic.topic}`;
+                weakBanner.classList.remove('hidden');
+            } else {
+                weakBanner.classList.add('hidden');
+            }
         }
 
         function filterData(subject) {
             currentFilter = subject;
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 if(btn.innerText === subject) {
-                    btn.classList.add('bg-indigo-600', 'text-white');
-                    btn.classList.remove('bg-gray-200', 'text-gray-700');
+                    btn.className = "filter-btn active px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 text-white transition shadow-sm";
                 } else {
-                    btn.classList.add('bg-gray-200', 'text-gray-700');
-                    btn.classList.remove('bg-indigo-600', 'text-white');
+                    btn.className = "filter-btn px-3 py-1.5 text-xs font-bold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition";
                 }
             });
             renderList();
         }
 
-        // --- 4. 處理拍照與 AI 模擬分析 ---
+        // --- 4. 拍照與 AI 模擬核心 ---
         const imageInput = document.getElementById('imageInput');
-        const previewContainer = document.getElementById('previewContainer');
-        const imagePreview = document.getElementById('imagePreview');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        
-        const aiStateEmpty = document.getElementById('aiStateEmpty');
-        const aiStateLoading = document.getElementById('aiStateLoading');
-        const aiStateResult = document.getElementById('aiStateResult');
-
-        imageInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    previewContainer.classList.remove('hidden');
+                reader.onload = function(evt) {
+                    document.getElementById('imagePreview').src = evt.target.result;
+                    document.getElementById('previewContainer').classList.remove('hidden');
                     
-                    // 恢復初始 AI 狀態
-                    aiStateEmpty.classList.remove('hidden');
-                    aiStateLoading.classList.add('hidden');
-                    aiStateResult.classList.add('hidden');
+                    document.getElementById('aiStateEmpty').classList.remove('hidden');
+                    document.getElementById('aiStateLoading').classList.add('hidden');
+                    document.getElementById('aiStateResult').classList.add('hidden');
                 }
                 reader.readAsDataURL(file);
             }
         });
 
-        analyzeBtn.addEventListener('click', function() {
-            // UI 狀態切換
-            aiStateEmpty.classList.add('hidden');
-            aiStateLoading.classList.remove('hidden');
-            aiStateResult.classList.add('hidden');
+        document.getElementById('analyzeBtn').addEventListener('click', function() {
+            document.getElementById('aiStateEmpty').classList.add('hidden');
+            document.getElementById('aiStateLoading').classList.remove('hidden');
+            document.getElementById('aiStateResult').classList.add('hidden');
             
-            // 模擬呼叫 AI API (延遲 2.5 秒)
             setTimeout(() => {
-                // 1. 隨機從資料庫抽一題模擬 AI 判讀出的單元
-                const randomIndex = Math.floor(Math.random() * mistakesDB.length);
-                const identifiedTopic = mistakesDB[randomIndex];
+                // 模擬 AI：80% 抓現有單元，20% 觸發「動態新增新單元」
+                const isDynamic = Math.random() < 0.2;
+                let targetItem;
+                let extractedPoint = "";
 
-                // 2. 更新結果介面文字
-                document.getElementById('aiSubjectTopic').innerText = `${identifiedTopic.subject}：${identifiedTopic.topic}`;
+                if(isDynamic) {
+                    // 模擬 AI 抓到課綱外或超細分單元
+                    extractedPoint = "AI分析：此題混合了課外延伸概念";
+                    targetItem = addDynamicTopic(
+                        "自然", 
+                        "地科：天文觀測延伸 (AI動態新增)", 
+                        "望遠鏡原理、光害影響等未歸類考點", 
+                        extractedPoint
+                    );
+                } else {
+                    // 從現有資料隨機抓取
+                    const randomIndex = Math.floor(Math.random() * mistakesDB.length);
+                    targetItem = mistakesDB[randomIndex];
+                    
+                    // 根據文字生成假知識點
+                    const keyword = targetItem.desc.split('、')[0] || "核心定義";
+                    extractedPoint = `誤解了「${keyword}」的應用前提，導致解題方向錯誤。`;
+                    
+                    // 更新數量並推入知識點
+                    targetItem.count += 1;
+                    if(!targetItem.points) targetItem.points = [];
+                    targetItem.points.unshift(extractedPoint);
+                    if(targetItem.points.length > 5) targetItem.points.pop();
+                }
+
+                // 更新介面
+                document.getElementById('aiSubjectTopic').innerText = `${targetItem.subject}：${targetItem.topic}`;
+                document.getElementById('aiKnowledgePoint').innerText = extractedPoint;
                 
-                // 3. 切換顯示
-                aiStateLoading.classList.add('hidden');
-                aiStateResult.classList.remove('hidden');
-                aiStateResult.classList.add('flex');
+                document.getElementById('aiStateLoading').classList.add('hidden');
+                document.getElementById('aiStateResult').classList.remove('hidden');
+                document.getElementById('aiStateResult').classList.add('flex');
 
-                // 4. 【核心步驟】自動將該題寫入右側資料庫 (數量 +1)
-                identifiedTopic.count += 1;
-                
-                // 自動跳轉濾鏡到該科目並重新渲染
-                filterData(identifiedTopic.subject);
+                filterData(targetItem.subject); // 自動跳轉至該科
 
-            }, 2500);
+            }, 2000);
         });
 
-        // 初始載入渲染
+        // 初始載入
         filterData('全部');
     </script>
 </body>
 </html>
+
