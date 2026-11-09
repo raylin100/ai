@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>108課綱 學測五科 AI 錯題管家 v5.0</title>
+    <title>108課綱 學測五科 AI 錯題管家 v5.1 (防呆修正版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .loader {
@@ -40,7 +40,7 @@
         <header class="no-print bg-gradient-to-r from-indigo-700 via-purple-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
             <div class="flex flex-col md:flex-row justify-between items-center relative z-10 gap-4">
                 <div>
-                    <h1 class="text-3xl font-extrabold tracking-tight">📸 學測 AI 錯題管家 5.0</h1>
+                    <h1 class="text-3xl font-extrabold tracking-tight">📸 學測 AI 錯題管家 5.1</h1>
                     <p class="mt-1 text-indigo-100 font-medium">觀念粗心標籤 ｜ 原題圖片留存 ｜ 考前 PDF 秘笈</p>
                 </div>
                 <!-- API Key 設定區 -->
@@ -76,9 +76,10 @@
                 <div id="previewContainer" class="hidden mt-4 text-center">
                     <img id="imagePreview" src="" class="max-h-40 mx-auto rounded-lg shadow border border-gray-200 mb-4 object-contain" />
                     <button id="analyzeBtn" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-transform transform active:scale-95">
-                        ✨ 啟動真實 AI 診斷 (需設定金鑰)
+                        ✨ 啟動真實 AI 診斷
                     </button>
-                    <p id="apiErrorMsg" class="hidden text-red-500 text-sm font-bold mt-2"></p>
+                    <!-- 錯誤訊息顯示區加強 -->
+                    <p id="apiErrorMsg" class="hidden text-red-500 text-sm font-bold mt-3 bg-red-50 p-2 rounded border border-red-200"></p>
                 </div>
 
                 <hr class="my-6 border-gray-100">
@@ -183,18 +184,16 @@
         }
 
         // --- 2. 資料庫升級與無痛轉移機制 (v4 -> v5) ---
-        // 為了將單純的字串 points 轉為包含圖片與分類的物件陣列
         let mistakesDB = JSON.parse(localStorage.getItem('GSAT_MistakesDB_v5'));
         if (!mistakesDB) {
             let oldDB = JSON.parse(localStorage.getItem('GSAT_MistakesDB_v4'));
             if (oldDB) {
-                // 將 v4 資料升級為 v5 格式
                 mistakesDB = oldDB.map(item => ({
                     ...item,
                     points: (item.points || []).map(p => typeof p === 'string' ? { text: p, type: '舊紀錄', img: null } : p)
                 }));
             } else {
-                mistakesDB = []; // 初始空白陣列
+                mistakesDB = []; 
             }
             saveDB();
         }
@@ -236,7 +235,6 @@
             filtered.forEach(item => {
                 const c = colors[item.subject] || colors["預設"];
                 
-                // 渲染知識點與標籤、圖片按鈕
                 let pointsHtml = '';
                 if (item.points && item.points.length > 0) {
                     const lis = item.points.map(p => {
@@ -244,7 +242,6 @@
                         let type = p.type || '未分類';
                         let img = p.img || null;
                         
-                        // 標籤顏色判定
                         let badgeColor = type.includes('觀念') ? 'bg-red-100 text-red-700 border-red-200' : 
                                          (type.includes('粗心') ? 'bg-yellow-100 text-yellow-700 border-yellow-200' : 'bg-gray-100 text-gray-600 border-gray-200');
 
@@ -286,7 +283,6 @@
             updateDashboard();
         }
 
-        // Modal 圖片控制
         function showQuestion(base64Str) {
             document.getElementById('modalImage').src = base64Str;
             document.getElementById('imageModal').classList.remove('hidden');
@@ -319,7 +315,7 @@
                 if (item) {
                     if(!item.points) item.points = [];
                     item.points.unshift({ text: point, type: '手動筆記', img: null });
-                    if(item.points.length > 5) item.points.pop(); // 限制每個單元最多存5筆最新紀錄，避免容量超載
+                    if(item.points.length > 5) item.points.pop();
                     item.count += 1;
                     saveDB();
                     renderList();
@@ -356,8 +352,8 @@
         }
 
         // --- 4. 圖片處理與串接 Gemini API ---
-        let currentCompressedImageURL = ""; // 包含 data:image/jpeg;base64,
-        let currentBase64ForAPI = ""; // 純 base64 給 API 用的
+        let currentCompressedImageURL = ""; 
+        let currentBase64ForAPI = ""; 
 
         const imageInput = document.getElementById('imageInput');
         imageInput.addEventListener('change', function(e) {
@@ -365,12 +361,11 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    // 【防爆機制】：使用 Canvas 進行圖片壓縮，大幅降低 LocalStorage 負載
                     const img = new Image();
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 700; // 限制最大寬度
+                        const MAX_WIDTH = 700; 
                         let width = img.width;
                         let height = img.height;
 
@@ -382,7 +377,6 @@
                         canvas.height = height;
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        // 轉為較低品質的 jpeg 以節省空間 (0.6)
                         currentCompressedImageURL = canvas.toDataURL('image/jpeg', 0.6);
                         currentBase64ForAPI = currentCompressedImageURL.split(',')[1];
 
@@ -401,7 +395,7 @@
             const errorMsg = document.getElementById('apiErrorMsg');
             
             if (!apiKey) {
-                errorMsg.innerText = "⚠️ 請先在右上角填寫 Gemini API Key！";
+                errorMsg.innerText = "⚠️ 錯誤：請先在右上角填寫 Gemini API Key！";
                 errorMsg.classList.remove('hidden');
                 return;
             }
@@ -412,9 +406,8 @@
             errorMsg.classList.add('hidden');
 
             try {
-                // 加入 error_type 要求
                 const promptText = `這是一張高中學測試題的照片。請分析題目內容，並歸類至108課綱範圍(國文、英文、數學、自然、社會)。
-請依循以下 JSON 格式回傳，且勿加入 markdown 標籤：
+請嚴格依循以下 JSON 格式回傳，絕對不要加入任何 markdown 標籤(例如 \`\`\`json)：
 {
   "subject": "科目名稱(限填:國文,英文,數學,自然,社會)",
   "topic": "適合的108課綱核心單元名稱",
@@ -437,9 +430,22 @@
                 });
 
                 const data = await response.json();
-                if (data.error) throw new Error(data.error.message);
+                
+                // 檢查是不是 API Key 無效或其他 HTTP 錯誤
+                if (data.error) {
+                    throw new Error(`API 拒絕請求 (${data.error.message})`);
+                }
 
-                const aiData = JSON.parse(data.candidates[0].content.parts[0].text);
+                // 【防呆機制】：強制清理多餘的 Markdown 標籤，避免 JSON 解析失敗
+                let rawText = data.candidates[0].content.parts[0].text;
+                let cleanText = rawText.replace(/```json/gi, '').replace(/```/gi, '').trim();
+                
+                let aiData;
+                try {
+                    aiData = JSON.parse(cleanText);
+                } catch (parseErr) {
+                    throw new Error(`AI 回傳格式錯誤，無法解析資料。`);
+                }
 
                 // 更新 UI 狀態
                 let badgeClass = aiData.error_type.includes('觀念') ? 'bg-red-500' : 'bg-yellow-500';
@@ -453,13 +459,11 @@
                 if (existingItem) {
                     existingItem.count += 1;
                     if(!existingItem.points) existingItem.points = [];
-                    // 寫入包含圖片的紀錄
                     existingItem.points.unshift({ 
                         text: aiData.knowledge_point, 
                         type: aiData.error_type, 
                         img: currentCompressedImageURL 
                     });
-                    // 保留最近 5 筆防止容量爆炸
                     if(existingItem.points.length > 5) existingItem.points.pop();
                 } else {
                     mistakesDB.push({
@@ -483,9 +487,10 @@
                 filterData(aiData.subject); 
 
             } catch (err) {
-                console.error(err);
+                console.error("API 錯誤:", err);
                 document.getElementById('aiStateLoading').classList.add('hidden');
-                errorMsg.innerText = "⚠️ API 呼叫失敗，請檢查 API Key 或網路狀態。";
+                // 將具體的錯誤原因印在畫面上
+                errorMsg.innerText = `⚠️ API 呼叫失敗：${err.message || '無法連線，請檢查網路'}`;
                 errorMsg.classList.remove('hidden');
             }
         });
