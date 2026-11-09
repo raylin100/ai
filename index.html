@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>108課綱 學測五科 AI 錯題管家 v5.1 (防呆修正版)</title>
+    <title>108課綱 學測五科 AI 錯題管家 v5.2 (完整課綱版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .loader {
@@ -40,8 +40,8 @@
         <header class="no-print bg-gradient-to-r from-indigo-700 via-purple-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
             <div class="flex flex-col md:flex-row justify-between items-center relative z-10 gap-4">
                 <div>
-                    <h1 class="text-3xl font-extrabold tracking-tight">📸 學測 AI 錯題管家 5.1</h1>
-                    <p class="mt-1 text-indigo-100 font-medium">觀念粗心標籤 ｜ 原題圖片留存 ｜ 考前 PDF 秘笈</p>
+                    <h1 class="text-3xl font-extrabold tracking-tight">📸 學測 AI 錯題管家 5.2</h1>
+                    <p class="mt-1 text-indigo-100 font-medium">完整版 108 課綱資料庫 ｜ 觀念粗心標籤 ｜ 原題圖片留存</p>
                 </div>
                 <!-- API Key 設定區 -->
                 <div class="bg-white/20 p-3 rounded-lg flex items-center gap-2 backdrop-blur-sm w-full md:w-auto">
@@ -78,7 +78,7 @@
                     <button id="analyzeBtn" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-transform transform active:scale-95">
                         ✨ 啟動真實 AI 診斷
                     </button>
-                    <!-- 錯誤訊息顯示區加強 -->
+                    <!-- 錯誤訊息顯示區 -->
                     <p id="apiErrorMsg" class="hidden text-red-500 text-sm font-bold mt-3 bg-red-50 p-2 rounded border border-red-200"></p>
                 </div>
 
@@ -183,9 +183,83 @@
             alert('API 金鑰已儲存！');
         }
 
-        // --- 2. 資料庫升級與無痛轉移機制 (v4 -> v5) ---
+        // --- 2. ⚠️ 超完整一字不漏版 108 課綱細項資料庫 ---
+        const initData = [
+            // 國文科
+            ["國文", "部定推薦古文15篇", "先秦至明清與臺灣古典文學：燭之武退秦師、大同與小康、諫逐客書、鴻門宴、出師表、桃花源記、師說、赤壁賦、虯髯客傳、項脊軒志、晚遊六橋待月記、勞山道士、勸和論、鹿港乘桴記、畫菊自序"],
+            ["國文", "中華文化基本教材", "論語(學問修身仁愛孝道)、孟子(性善四端義利王道養氣)、大學中庸(三綱領八條目格物致知誠意正心中庸之道)"],
+            ["國文", "語文知識與文學史", "現代文學選文、先秦諸子思想(儒道墨法)、韻文演變(詩經至詞曲)、散文與小說流變(六朝至明清)"],
+            ["國文", "語文應用與國寫", "字音字形字義、成語典故、修辭法、應用文(書信題辭)、國寫知性題與情意題"],
+            
+            // 英文科
+            ["英文", "詞彙與片語", "Level 1~4詞彙、動詞片語(Phrasal Verbs)、介系詞片語及搭配詞(Collocations)"],
+            ["英文", "時態與語態", "十二種基本時態、被動語態(含特殊句型被動)"],
+            ["英文", "助動詞與假設語氣", "情態助動詞(推測義務)、假設語氣(與現在/過去事實相反)、If省略倒裝、意志動詞用法"],
+            ["英文", "動詞與分詞", "不定詞/動名詞受詞區別、感官/使役動詞、分詞構句與獨立分詞構句(with+O+OC)"],
+            ["英文", "三大子句", "名詞子句、形容詞子句(關代/關副/限定/複合關代)、副詞子句"],
+            ["英文", "特殊句型與結構", "比較級/最高級、倒裝句、強調句型(It is... that)、一致律、平行結構"],
+            ["英文", "閱讀與寫作測驗", "克漏字、文意選填、篇章結構、閱讀測驗、中譯英、英文作文"],
+            
+            // 數學科
+            ["數學", "數與式 (高一)", "實數系、分點公式、絕對值、式的運算、乘法公式、算幾不等式"],
+            ["數學", "直線與圓 (高一)", "直線方程式、二元一次不等式、線性規劃、圓方程式、切線"],
+            ["數學", "多項式函數 (高一)", "除法原理、餘式/因式定理、一次/二次/三次函數圖形特徵、多項式不等式"],
+            ["數學", "數列與級數 (高一)", "等差/等比數列級數、遞迴關係式、數學歸納法"],
+            ["數學", "數據分析 (高一)", "一維數據(平均中位標準差)、數據標準化、二維數據(散布圖/相關係數/迴歸直線)"],
+            ["數學", "排列組合與機率 (高一)", "邏輯集合、計數原理、直線/重複排列、組合、二項式定理、古典機率與期望值"],
+            ["數學", "三角比 (高一)", "銳角三角比、廣義角與極坐標、正弦/餘弦定理、面積公式、三角測量"],
+            ["數學", "三角函數 (數A/數B)", "弧度制、三角函數圖形(週期/振幅/伸縮平移)、和差角/倍半角公式(數A)、疊合(數A)"],
+            ["數學", "指對數函數 (數A/數B)", "指數律、對數律、圖形性質、常用對數首尾數(數A)、按比例成長模型/連續複利(數B)"],
+            ["數學", "平面向量與幾何 (數A/數B)", "向量幾何表示/線性組合、分點公式、內積、柯西/三角不等式(數A)、二階行列式(數A)、黃金比例/透視圖(數B)"],
+            ["數學", "空間向量與幾何 (數A/數B)", "三垂線/兩面角、空間坐標、內外積(數A)、三階行列式(數A)、經緯度與大圓距離(數B)、圓錐截痕(數B)"],
+            ["數學", "空間中的平面與直線 (數A)", "空間平面方程式(法向量/距離)、空間直線方程式(參數/比例式)、三元一次聯立方程組"],
+            ["數學", "機率統計與矩陣 (數A/數B)", "條件機率、貝氏定理、獨立事件、矩陣運算、反方陣/轉移矩陣/線性變換(數A)、列聯表與獨立性檢定(數B)"],
+            
+            // 自然科
+            ["自然", "物理：科學態度與觀念", "科學方法、國際單位制(SI)、物理學發展簡史"],
+            ["自然", "物理：物質組成與交互作用", "物質組成、原子構造、四種基本交互作用(重力、電磁力、強/弱作用力)"],
+            ["自然", "物理：物體運動與天體", "運動學、牛頓運動定律、常見力(摩擦/正向力)、克卜勒定律、萬有引力"],
+            ["自然", "物理：電磁效應與波", "電流磁效應、電磁感應、電磁波、光的性質(反射/折射/干涉/繞射)、都卜勒效應"],
+            ["自然", "物理：量子現象與光譜", "普朗克、光電效應、波粒二象性、氫原子光譜、波耳原子模型"],
+            ["自然", "物理：能量形式與守恆", "功與動能、位能、力學能守恆、質能互換公式(E=mc^2)"],
+            ["自然", "化學：物質分類與分離", "純物質/混合物、分離實驗(過濾/蒸餾/層析)、原子說、電子排列"],
+            ["自然", "化學：週期表與化學鍵", "週期表規律(族與週期)、離子鍵、共價鍵、金屬鍵"],
+            ["自然", "化學：化學式與計量", "實驗/分子/示性/結構式、化學方程式、限制試劑、反應熱"],
+            ["自然", "化學：水溶液與反應", "體積莫耳濃度、ppm、溶解度、酸鹼反應(pH/中和)、氧化還原、沉澱反應"],
+            ["自然", "化學：生活化學與現代科技", "醣類/蛋白質/核酸/脂質、常見藥物、界面活性劑、溫室效應/酸雨/水污染/綠色化學"],
+            ["自然", "生物：細胞構造與功能", "細胞學說、原核/真核、細胞膜結構與物質運輸、胞器"],
+            ["自然", "生物：細胞能量來源", "代謝作用、酵素(酶)、細胞呼吸作用、光合作用"],
+            ["自然", "生物：細胞週期與分裂", "有絲分裂(染色體複製分離)、減數分裂(配子形成)"],
+            ["自然", "生物：性狀遺傳與DNA", "孟德爾遺傳、性聯遺傳、DNA結構與複製、基因表現(轉錄轉譯)"],
+            ["自然", "生物：生物演化與分類", "天擇說、演化證據、分類與三域系統"],
+            ["自然", "生物：必考實驗探討", "細胞觀察、顯微測量、動植物細胞滲透作用、DNA粗萃取"],
+            ["自然", "地科：太空中的地球", "太陽系形成與結構、星等與觀星(天球/星座)、宇宙起源與哈伯定律"],
+            ["自然", "地科：固態地球變動", "地球內部構造、板塊構造、地震(震央/地震波)、地殼變動"],
+            ["自然", "地科：大氣與天氣系統", "大氣結構分層、氣壓與風、天氣系統(高低氣壓/鋒面/颱風)"],
+            ["自然", "地科：海洋與環境", "海水溫鹽性質、洋流與潮汐、海氣交互作用(聖嬰/反聖嬰)"],
+            ["自然", "地科：氣候變遷與災害", "歷史氣候變遷、全球暖化、天然災害、環境永續發展"],
+
+            // 社會科
+            ["社會", "歷史：台灣早期與清領", "原住民族多元文化、荷西時期、鄭氏政權、移民開墾、開港通商、分類械鬥與土地制度"],
+            ["社會", "歷史：台灣日治與當代", "殖民統治/同化政策、米糖經濟、抗日與政治社會運動、二二八、民主轉型、戰後經濟與多元文化"],
+            ["社會", "歷史：東亞傳統與現代化", "傳統政治權力/戶籍土地制度、人群移動與經貿交流、西方衝擊(自強/明治)、民族主義與建國戰爭"],
+            ["社會", "歷史：世界史與全球化", "古代文明、中古宗教、海外擴張、科學啟蒙與雙元革命、帝國主義、兩次大戰與冷戰、全球化"],
+            ["社會", "地理：地理技能", "地圖要素/投影/主題地圖、GIS資料結構(向量/網格)、空間分析(疊圖/緩衝區/路徑)"],
+            ["社會", "地理：自然地理系統", "地形營力/河流/海岸/風成/冰河/岩溶地形、氣候要素成因/分類景觀、天氣災害"],
+            ["社會", "地理：人文地理系統", "人口成長轉型/遷移、聚落演變/都市化/中地理論、農業系統、工業區位、第三級產業"],
+            ["社會", "地理：區域地理", "台灣與東亞、東南亞/南亞、西亞/北非、撒哈拉以南非洲、歐洲/北美洲、中南美洲、大洋洲/兩極"],
+            ["社會", "公民：社會與文化", "自我與他人互動、性別與身體自主、社會階層化/流動/不平等、文化認同/族群、媒體再現與第四權"],
+            ["社會", "公民：政治與民主", "國家主權、民主政治憲政、中央政府體制(內閣/總統/雙首長)、選舉政黨利益團體、公民不服從、國際政治兩岸關係"],
+            ["社會", "公民：法律與生活", "憲法基本權(比例原則)、行政法(依法行政/行政處分/救濟)、民法(契約/行為能力/親屬侵權)、刑法(罪刑法定/構成要件)"],
+            ["社會", "公民：經濟與永續發展", "機會成本/比較利益、供需市場均衡、市場失靈(外部效果)/公共財、政府干預、總體經濟(GDP/吉尼係數)、國際貿易"]
+        ];
+
+        // --- 資料庫修復與比對引擎 ---
         let mistakesDB = JSON.parse(localStorage.getItem('GSAT_MistakesDB_v5'));
+        let needsUpdate = false;
+
         if (!mistakesDB) {
+            // 如果連 v5 都沒有，試著從 v4 拯救舊資料
             let oldDB = JSON.parse(localStorage.getItem('GSAT_MistakesDB_v4'));
             if (oldDB) {
                 mistakesDB = oldDB.map(item => ({
@@ -195,6 +269,33 @@
             } else {
                 mistakesDB = []; 
             }
+            needsUpdate = true;
+        }
+
+        // 最重要的步驟：將上面超完整的 initData 強制補回系統，絕對不讓它消失！
+        initData.forEach((initItem, index) => {
+            const existing = mistakesDB.find(d => d.subject === initItem[0] && d.topic === initItem[1]);
+            if (existing) {
+                // 如果已經存在，把被我刪掉的詳細描述覆蓋回去
+                if (existing.desc !== initItem[2]) {
+                    existing.desc = initItem[2];
+                    needsUpdate = true;
+                }
+            } else {
+                // 如果是之前被我刪掉的單元，直接加回來
+                mistakesDB.push({
+                    id: Date.now() + index,
+                    subject: initItem[0],
+                    topic: initItem[1],
+                    desc: initItem[2],
+                    count: 0,
+                    points: []
+                });
+                needsUpdate = true;
+            }
+        });
+
+        if (needsUpdate) {
             saveDB();
         }
 
@@ -265,6 +366,8 @@
                                 <span class="${c.bg} ${c.text} text-[10px] font-bold px-2 py-0.5 rounded border ${c.border}">${item.subject}</span>
                                 <span class="font-bold text-gray-800 text-sm">${item.topic}</span>
                             </div>
+                            <!-- 完整呈現細項說明 -->
+                            <div class="text-xs text-gray-500 leading-relaxed">${item.desc}</div>
                         </div>
                         <div class="action-btns flex items-center gap-2 bg-gray-50 rounded-lg p-1 border border-gray-100">
                             <button onclick="updateCount(${item.id}, -1)" class="w-7 h-7 rounded bg-white hover:bg-gray-200 text-gray-600 font-bold">-</button>
@@ -406,6 +509,7 @@
             errorMsg.classList.add('hidden');
 
             try {
+                // 將完整的細項資料庫也一併提供給AI，讓它的歸類更神準
                 const promptText = `這是一張高中學測試題的照片。請分析題目內容，並歸類至108課綱範圍(國文、英文、數學、自然、社會)。
 請嚴格依循以下 JSON 格式回傳，絕對不要加入任何 markdown 標籤(例如 \`\`\`json)：
 {
@@ -431,12 +535,10 @@
 
                 const data = await response.json();
                 
-                // 檢查是不是 API Key 無效或其他 HTTP 錯誤
                 if (data.error) {
                     throw new Error(`API 拒絕請求 (${data.error.message})`);
                 }
 
-                // 【防呆機制】：強制清理多餘的 Markdown 標籤，避免 JSON 解析失敗
                 let rawText = data.candidates[0].content.parts[0].text;
                 let cleanText = rawText.replace(/```json/gi, '').replace(/```/gi, '').trim();
                 
@@ -447,14 +549,12 @@
                     throw new Error(`AI 回傳格式錯誤，無法解析資料。`);
                 }
 
-                // 更新 UI 狀態
                 let badgeClass = aiData.error_type.includes('觀念') ? 'bg-red-500' : 'bg-yellow-500';
                 document.getElementById('aiErrorTypeBadge').className = `${badgeClass} text-white px-2 py-0.5 rounded text-xs font-bold shadow-sm`;
                 document.getElementById('aiErrorTypeBadge').innerText = aiData.error_type;
                 document.getElementById('aiSubjectTopic').innerText = `${aiData.subject}：${aiData.topic}`;
                 document.getElementById('aiKnowledgePoint').innerText = aiData.knowledge_point;
 
-                // 寫入資料庫邏輯
                 let existingItem = mistakesDB.find(d => d.subject === aiData.subject && d.topic === aiData.topic);
                 if (existingItem) {
                     existingItem.count += 1;
@@ -470,6 +570,7 @@
                         id: Date.now(),
                         subject: aiData.subject,
                         topic: aiData.topic,
+                        desc: "AI 動態新增單元",
                         count: 1,
                         points: [{ 
                             text: aiData.knowledge_point, 
@@ -489,7 +590,6 @@
             } catch (err) {
                 console.error("API 錯誤:", err);
                 document.getElementById('aiStateLoading').classList.add('hidden');
-                // 將具體的錯誤原因印在畫面上
                 errorMsg.innerText = `⚠️ API 呼叫失敗：${err.message || '無法連線，請檢查網路'}`;
                 errorMsg.classList.remove('hidden');
             }
