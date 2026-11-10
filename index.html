@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>108課綱 學測五科 AI 錯題管家 v5.3 (API連線修復版)</title>
+    <title>108課綱 學測五科 AI 錯題管家 v5.4 (2.0最新版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .loader {
@@ -40,7 +40,7 @@
         <header class="no-print bg-gradient-to-r from-indigo-700 via-purple-600 to-indigo-600 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
             <div class="flex flex-col md:flex-row justify-between items-center relative z-10 gap-4">
                 <div>
-                    <h1 class="text-3xl font-extrabold tracking-tight">📸 學測 AI 錯題管家 5.3</h1>
+                    <h1 class="text-3xl font-extrabold tracking-tight">📸 學測 AI 錯題管家 5.4</h1>
                     <p class="mt-1 text-indigo-100 font-medium">完整版 108 課綱資料庫 ｜ 雙模型自動修復 ｜ 原題圖片留存</p>
                 </div>
                 <!-- API Key 設定區 -->
@@ -230,7 +230,7 @@
             ["自然", "化學：生活化學與現代科技", "醣類/蛋白質/核酸/脂質、常見藥物、界面活性劑、溫室效應/酸雨/水污染/綠色化學"],
             ["自然", "生物：細胞構造與功能", "細胞學說、原核/真核、細胞膜結構與物質運輸、胞器"],
             ["自然", "生物：細胞能量來源", "代謝作用、酵素(酶)、細胞呼吸作用、光合作用"],
-            ["自然", "生物：細胞週期與分裂", "有絲分裂(染色體複製分離)、減數分裂(配子形成)"],
+            ["自然", "生物：細胞週期與分裂", "有絲分裂(染色體複製分離)、减數分裂(配子形成)"],
             ["自然", "生物：性狀遺傳與DNA", "孟德爾遺傳、性聯遺傳、DNA結構與複製、基因表現(轉錄轉譯)"],
             ["自然", "生物：生物演化與分類", "天擇說、演化證據、分類與三域系統"],
             ["自然", "生物：必考實驗探討", "細胞觀察、顯微測量、動植物細胞滲透作用、DNA粗萃取"],
@@ -489,11 +489,11 @@
             }
         });
 
-        // ✨ 建立自動備用模型輪詢機制：按順序測試 gemini-1.5-flash-8b -> gemini-1.5-flash
+        // ✨ 建立自動備用模型輪詢機制：按順序測試 gemini-2.5-flash -> gemini-2.0-flash
         async function fetchGeminiWithFallback(apiKey, payload) {
             const modelsToTry = [
-                'gemini-1.5-flash-8b', 
-                'gemini-1.5-flash'
+                'gemini-2.5-flash', 
+                'gemini-2.0-flash'
             ];
 
             let lastError = null;
