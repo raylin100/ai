@@ -185,6 +185,7 @@
 
         // --- 2. ⚠️ 超完整一字不漏版 108 課綱細項資料庫 ---
         const initData = [
+            // ... (課綱資料保持原樣)
             // 國文科
             ["國文", "部定推薦古文15篇", "先秦至明清與臺灣古典文學：燭之武退秦師、大同與小康、諫逐客書、鴻門宴、出師表、桃花源記、師說、赤壁賦、虯髯客傳、項脊軒志、晚遊六橋待月記、勞山道士、勸和論、鹿港乘桴記、畫菊自序"],
             ["國文", "中華文化基本教材", "論語(學問修身仁愛孝道)、孟子(性善四端義利王道養氣)、大學中庸(三綱領八條目格物致知誠意正心中庸之道)"],
@@ -488,10 +489,10 @@
             }
         });
 
-        // ✨ 建立自動備用模型輪詢機制：按順序測試 gemini-2.0-flash -> gemini-1.5-flash
+        // ✨ 建立自動備用模型輪詢機制：按順序測試 gemini-1.5-flash-8b -> gemini-1.5-flash
         async function fetchGeminiWithFallback(apiKey, payload) {
             const modelsToTry = [
-                'gemini-2.0-flash',
+                'gemini-1.5-flash-8b', 
                 'gemini-1.5-flash'
             ];
 
@@ -608,7 +609,7 @@
             } catch (err) {
                 console.error("API 錯誤:", err);
                 document.getElementById('aiStateLoading').classList.add('hidden');
-                errorMsg.innerText = `⚠️ API 呼叫失敗：${err.message || '無法連線，請檢查 API Key 或網路'}`;
+                errorMsg.innerText = "⚠️ 系統診斷錯誤：" + err.message + " (可能是 API Key 無效、複製到空白，或網路被阻擋)";
                 errorMsg.classList.remove('hidden');
             }
         });
